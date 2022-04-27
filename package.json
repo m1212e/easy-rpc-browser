@@ -1,0 +1,27 @@
+{
+  "name": "@easy-rpc/browser",
+  "version": "0.0.26",
+  "description": "Browser client for easy-rpc",
+  "main": "main.js",
+  "types": "main.d.ts",
+  "module": "main.js",
+  "scripts": {
+    "ts-types": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "(rm -r dist || del dist /s /q) && node ./build.js && npm run ts-types",
+    "pub": "npm run build && cd dist && npm publish"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.31",
+    "typescript": "^4.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m1212e/easy-rpc-browser.git"
+  },
+  "author": "m1212e",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m1212e/easy-rpc-browser/issues"
+  },
+  "homepage": "https://github.com/m1212e/easy-rpc-browser#readme"
+}
