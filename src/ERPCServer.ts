@@ -2,6 +2,7 @@ import { ERPCTarget } from "./ERPCTarget";
 import { registerNewTargetNotifier } from "./sockets";
 
 //TODO auto reconnect websocket?
+//TODO make connection manual/let the user choose when to connect ws where
 
 /**
  * Abstract class to initialize a rpc server.
