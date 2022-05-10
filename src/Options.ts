@@ -13,5 +13,4 @@ export interface TargetOptions {
   port: number;
 }
 
-export interface ServerOptions {
-}
+export interface ServerOptions {}

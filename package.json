@@ -1,6 +1,6 @@
 {
   "name": "@easy-rpc/browser",
-  "version": "0.0.26",
+  "version": "0.0.29",
   "description": "Browser client for easy-rpc",
   "main": "main.js",
   "types": "main.d.ts",

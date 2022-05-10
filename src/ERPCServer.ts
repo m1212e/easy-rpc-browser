@@ -1,4 +1,5 @@
 import { ERPCTarget } from "./ERPCTarget";
+import { ServerOptions, TargetOptions } from "./Options";
 import { registerNewTargetNotifier } from "./sockets";
 
 //TODO auto reconnect websocket?
@@ -8,20 +9,18 @@ import { registerNewTargetNotifier } from "./sockets";
  * Abstract class to initialize a rpc server.
  */
 export abstract class ERPCServer {
-  port: number;
-  readonly role: string;
+  private role: string;
   private mappedCallbacks = {};
   private sockets: WebSocket[] = [];
 
   constructor(
-    port: number,
+    options: ServerOptions,
     types: ("http-server" | "browser")[],
     enableSockets: boolean,
     role: string
   ) {
     //TODO make compatibility request
 
-    this.port = port;
     this.role = role;
 
     if (!enableSockets) {
@@ -42,28 +41,31 @@ export abstract class ERPCServer {
   /**
     This method is used by easy-rpc internally and is not intended for manual use. It can be used to register a function on the server dynamically.
   */
-  registerERPCCallbackFunction(func, identifier) {
+  private registerERPCCallbackFunction(func, identifier) {
     this.mappedCallbacks[identifier] = func;
   }
 
   /**
-   * Returns a promise which resolves when the server has been started
+   * Starts the server
    */
   start() {
-    registerNewTargetNotifier((t) => this.newTargetNotifier(t));
+    registerNewTargetNotifier((o) => this.newTargetNotifier(o));
   }
 
   /**
-   * Returns a promise which resolves when the server has been stopped
+   * Stops the server
    */
   stop() {
-    throw new Error("Recieving inside a browser is not supported yet.");
+    throw new Error("Stopping is not supported yet");
   }
 
-  private async newTargetNotifier(target: ERPCTarget) {
-    let address = target.options.address.replace("https://", "ws://");
+  /**
+   * Gets called whenever a new target is initialized
+   */
+  private async newTargetNotifier(options: TargetOptions) {
+    let address = options.address.replace("https://", "ws://");
     address = address.replace("http://", "ws://");
-    const socket = new WebSocket(address + ":" + target.options.port);
+    const socket = new WebSocket(address + ":" + options.port);
     this.sockets.push(socket);
 
     socket.addEventListener("error", (event) => {

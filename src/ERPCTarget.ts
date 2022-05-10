@@ -6,8 +6,8 @@ import { addTarget } from "./sockets";
  * Abstract class to initialize a remote rpc target. This abstract class helps performing requests and parsing responses from the corresponding server.
  */
 export abstract class ERPCTarget {
-  options: TargetOptions;
-  types: ("http-server" | "browser")[];
+  private options: TargetOptions;
+  private types: ("http-server" | "browser")[];
 
   constructor(options: TargetOptions, types: ("http-server" | "browser")[]) {
     //TODO make compatibility request
@@ -15,10 +15,10 @@ export abstract class ERPCTarget {
     this.options = options;
     this.types = types;
 
-    addTarget(this);
+    addTarget(options);
   }
 
-  async call(methodIdentifier: string, parameters: any): Promise<any> {
+  private async call(methodIdentifier: string, parameters: any): Promise<any> {
     //TODO add checks for ensuring correct parameters, their types, array lengths, etc.
     if (this.types.find((e) => e == "http-server")) {
       return makeHTTPRequest(this.options, methodIdentifier, parameters);
