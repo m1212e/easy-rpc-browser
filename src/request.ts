@@ -7,6 +7,17 @@ export async function makeHTTPRequest(
 ) {
   const body = JSON.stringify(parameters);
 
+  if (
+    !options.address.startsWith("http") &&
+    !options.address.startsWith("https")
+  ) {
+    options.address = "https://" + options.address;
+  }
+
+  if (!methodIdentifier.startsWith("/")) {
+    methodIdentifier = "/" + methodIdentifier;
+  }
+
   const res = await fetch(
     `${options.address}:${options.port}${methodIdentifier}`,
     {
