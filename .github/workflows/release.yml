@@ -14,11 +14,12 @@ jobs:
       - name: Build and publish
         run: |
          npm ci
-         npm run build -- -release-version ${{github.ref_name}}
+         npm run build
          cd build
          npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
       # - name: Publish to Open VSX Registry
       #   uses: HaaLeo/publish-vscode-extension@v1
       #   with:
