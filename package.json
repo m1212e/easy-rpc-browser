@@ -6,9 +6,8 @@
   "types": "main.d.ts",
   "module": "main.js",
   "scripts": {
-    "ts-types": "tsc --emitDeclarationOnly --outDir dist",
-    "build": "(rm -r dist || del dist /s /q) && node ./build.js && npm run ts-types",
-    "pub": "npm run build && cd dist && npm publish"
+    "ts-types": "tsc --emitDeclarationOnly --outDir build",
+    "build": "node ./build.js && npm run ts-types"
   },
   "devDependencies": {
     "esbuild": "^0.14.31",

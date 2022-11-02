@@ -1,17 +1,35 @@
-const esbuild = require('esbuild');
-const fs = require('fs');
+const fs = require("fs");
 
-esbuild.buildSync({
-        entryPoints: ['./main.ts'],
-        outdir: 'dist',
-        bundle: true,
-        sourcemap: true,
-        format: "esm",
-        minify: true,
-        platform: 'browser',
-        target: ['es2018'],
-});
+if (!fs.existsSync("./build")) {
+    fs.mkdirSync("./build");
+}
 
+require('esbuild').build({
+    entryPoints: ['./src/main.ts'],
+    bundle: true,
+    outdir: './build',
+    format: "cjs",
+    platform: 'node',
+    external: ["vscode"],
+    minify: true,
+    target: "node14"
+}).catch(() => process.exit(1));
 
-fs.copyFileSync('package.json', 'dist/package.json');
-fs.copyFileSync('LICENSE', 'dist/LICENSE');
+// files/dirs on root level which should be included inside the build
+const include = [
+    "package.json",
+    "package-lock.json",
+];
+
+function copyToBuild(name) {
+    fs.cpSync(`./${name}`, `./build/${name}`, {recursive: true});
+}
+include.forEach(name => copyToBuild(name));
+
+const pkgjson = JSON.parse(fs.readFileSync("./build/package.json"));
+const index = process.argv.findIndex(e => e == "-release-version");
+if (index != -1) {
+    pkgjson.version = process.argv[index + 1]
+}
+pkgjson.main = "main.js"
+fs.writeFileSync("./build/package.json", JSON.stringify(pkgjson))
