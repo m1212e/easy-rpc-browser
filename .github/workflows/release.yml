@@ -16,7 +16,9 @@ jobs:
          npm ci
          npm run build -- -release-version ${{github.ref_name}}
          cd build
-         npx vsce publish --no-dependencies -p ${{ secrets.VSCODE_MARKETPLACE_ACCESSTOKEN }}
+         npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       # - name: Publish to Open VSX Registry
       #   uses: HaaLeo/publish-vscode-extension@v1
       #   with:
