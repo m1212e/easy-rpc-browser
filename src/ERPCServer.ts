@@ -42,9 +42,6 @@ export abstract class ERPCServer {
     This method is used by easy-rpc internally and is not intended for manual use. It can be used to register a function on the server dynamically.
   */
   private registerERPCCallbackFunction(func, identifier) {
-    if (!identifier.startsWith("/")) {
-      identifier = "/" + identifier;
-    }
     this.mappedCallbacks[identifier] = func;
   }
 
@@ -68,9 +65,9 @@ export abstract class ERPCServer {
   private async newTargetNotifier(options: TargetOptions) {
     let address = options.address.replace("https://", "ws://");
     address = address.replace("http://", "ws://");
-    const socket = new WebSocket(address + ":" + options.port);
+    const socket = new WebSocket(address + ":" + options.port + "/ws/" + this.role);
     this.sockets.push(socket);
-
+    
     socket.addEventListener("error", (event) => {
       console.error("Websocket error: ", event);
     });
@@ -78,23 +75,20 @@ export abstract class ERPCServer {
     socket.addEventListener("message", (event) => {
       this.onMessage(event.data, socket);
     });
-
-    socket.addEventListener("open", (event) => {
-      // identification request
-      socket.send(
-        JSON.stringify({
-          role: this.role,
-        })
-      );
-    });
   }
 
   private async onMessage(data: any, socket: WebSocket) {
     const parsedData = JSON.parse(data);
+    
+    const handler = this.mappedCallbacks[parsedData.method_identifier];
+    if (!handler) {
+      throw new Error("Could not find handler for " + parsedData.method_identifier);
+      
+    }
     const res = await (parsedData.body
-      ? this.mappedCallbacks[parsedData.url](...parsedData?.body)
-      : this.mappedCallbacks[parsedData.url]());
-
+      ? handler(...parsedData?.body)
+      : handler());
+    
     socket.send(
       JSON.stringify({
         id: parsedData.id,

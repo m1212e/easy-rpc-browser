@@ -14,12 +14,8 @@ export async function makeHTTPRequest(
     options.address = "https://" + options.address;
   }
 
-  if (!methodIdentifier.startsWith("/")) {
-    methodIdentifier = "/" + methodIdentifier;
-  }
-
   const res = await fetch(
-    `${options.address}:${options.port}${methodIdentifier}`,
+    `${options.address}:${options.port}/endpoints/${methodIdentifier}`,
     {
       method: "POST",
       credentials: "include",
