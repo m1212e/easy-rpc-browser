@@ -27,8 +27,8 @@ function copyToBuild(name) {
 include.forEach(name => copyToBuild(name));
 
 const pkgjson = JSON.parse(fs.readFileSync("./build/package.json"));
-if (process.env["GITHUB_REF_NAME"]) {
-    pkgjson.version = process.env["GITHUB_REF_NAME"]
+if (process.env.GITHUB_REF_NAME) {
+    pkgjson.version = process.env.GITHUB_REF_NAME
 }
 pkgjson.main = "main.js"
 fs.writeFileSync("./build/package.json", JSON.stringify(pkgjson))
