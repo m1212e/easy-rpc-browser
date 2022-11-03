@@ -14,7 +14,8 @@ jobs:
       - name: Build and publish
         run: | 
           npm ci
-          npm run build
+          node ./build.js
+          npx tsc --emitDeclarationOnly
           cd build
         env:
           REF_NAME: ${{ github.ref_name }}
