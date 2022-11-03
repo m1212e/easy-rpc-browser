@@ -12,11 +12,12 @@ jobs:
         with:
           node-version: 16
       - name: Build and publish
-        run: npm ci
-        run: npm run build
+        run: | 
+          npm ci
+          cd build
+          npm run build
         env:
           REF_NAME: ${{ github.ref_name }}
-        run: cd build
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
