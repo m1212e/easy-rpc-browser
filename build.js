@@ -13,7 +13,6 @@ require('esbuild').build({
     outdir: './build',
     format: "cjs",
     platform: 'node',
-    external: ["vscode"],
     minify: true,
     target: "node14"
 }).catch(() => process.exit(1));

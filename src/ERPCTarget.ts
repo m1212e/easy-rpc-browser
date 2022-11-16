@@ -7,22 +7,22 @@ import { addTarget } from "./sockets";
  */
 export abstract class ERPCTarget {
   private options: TargetOptions;
-  private types: ("http-server" | "browser")[];
+  private type: "http-server" | "browser";
 
-  constructor(options: TargetOptions, types: ("http-server" | "browser")[]) {
+  constructor(options: TargetOptions, type: "http-server" | "browser") {
     //TODO make compatibility request
 
     this.options = options;
-    this.types = types;
+    this.type = type;
 
     addTarget(options);
   }
 
   private async call(methodIdentifier: string, parameters: any): Promise<any> {
     //TODO add checks for ensuring correct parameters, their types, array lengths, etc.
-    if (this.types.find((e) => e == "http-server")) {
+    if (this.type == "http-server") {
       return makeHTTPRequest(this.options, methodIdentifier, parameters);
-    } else if (this.types.find((e) => e == "browser")) {
+    } else if (this.type == "browser") {
       throw new Error("Requests on browsers are not supported!");
     } else {
       throw new Error("Unknown server type of target");

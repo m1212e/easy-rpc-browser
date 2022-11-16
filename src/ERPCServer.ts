@@ -15,25 +15,16 @@ export abstract class ERPCServer {
 
   constructor(
     options: ServerOptions,
-    types: ("http-server" | "browser")[],
+    type: "http-server" | "browser",
     enableSockets: boolean,
     role: string
   ) {
-    //TODO make compatibility request
-
     this.role = role;
 
     if (!enableSockets) {
       throw new Error("A server on browser side must enable sockets to work!");
     }
-    //TODO correct type check
-    if (types.length == 0) {
-      throw new Error("Types can't be empty");
-    }
-    if (types.length != 1) {
-      throw new Error("Types array has wrong length: " + types.length);
-    }
-    if (types.find((e) => e != "browser")) {
+    if (type != "browser") {
       throw new Error('Cannot initialize with role other than "browser"');
     }
   }
