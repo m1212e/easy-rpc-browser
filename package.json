@@ -8,7 +8,7 @@
     "build": "node ./build.js && npx tsc --emitDeclarationOnly"
   },
   "devDependencies": {
-    "esbuild": "^0.14.31",
+    "esbuild": "^0.25.0",
     "typescript": "^4.6.3"
   },
   "repository": {
